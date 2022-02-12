@@ -72,5 +72,7 @@ class Decoupeur:
 
 
 Decoupeur("""
-.1 > print
+loop 42 * 2 {
+
+}
 """)
