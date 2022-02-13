@@ -8,8 +8,8 @@ class Decoupeur:
         self.generer()
 
     def polissage(self, code) -> str:
-        code = code.replace("\n", "")
-        code = code.replace("\t", "")
+        code = code.replace("\n", " ")
+        code = code.replace("\t", " ")
         if DEBUG_PRINT:
             print("Polissage :")
             print(code)      
@@ -55,6 +55,8 @@ class Decoupeur:
                 c = e[2][i]
                 if c.startswith("."):
                     analysed.append(["V", f"stream{i}" ,c[1:].strip()])
+                elif c in ["loop", "LOOP"]:
+                    analysed.append(["L", f"loop{i}" ,f"stream{i}"])
                 else:
                     analysed.append(["T", c ,"&".join([f"stream{j+i}" for j in range(e[0] // (e[1] if e[1] != 0 else 1))])])
                     if e[1] > 0:
@@ -72,7 +74,5 @@ class Decoupeur:
 
 
 Decoupeur("""
-loop 42 * 2 {
-
-}
+42 > LOOP
 """)
