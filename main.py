@@ -70,5 +70,5 @@ class Decoupeur:
 
 
 Decoupeur("""
-$coucou - $test > $coucou
+$coucou = $test > $coucou
 """)

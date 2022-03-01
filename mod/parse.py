@@ -11,8 +11,10 @@ def get_type(elmt: str):
         return "str", elmt[1:-1]
     elif elmt[0] == "$":
         return "var", elmt[1:]
-    elif elmt in ["+", "-", "*", "/", "=+", "=-", "=", "!"]:
+    elif elmt in ["+", "-", "*", "/", "%", "^", "**"]:
         return "op", elmt
+    elif elmt in ["==", "!=", "="]:
+        return "cpr", elmt
     else:
         return "func", elmt
 
@@ -27,21 +29,28 @@ def parse(e, i, length):
     charge = 0
     Vstream = f"stream{i}"
     sortie = []
-    
+
     for c in str(e[2][i]).split(" "):
 
         etype, econt = get_type(c)
 
         if charge:
             if etype in ["int", "str"]:
-                sortie.extend((["V", "temp", econt], ["C", Vstream, Vstream, charge, "temp"]))
+                sortie.append(["V", "temp", econt])
+                temp = "temp"  
 
             elif etype == "var":
-                sortie.append(["C", Vstream, Vstream, charge, econt])
-
+                temp = econt
+            
             else:
                 raise Exception(f"{etype} ne peut pas etre utilise apres un operateur")
 
+            if get_type(charge)[0] == "op":
+                sortie.append(["C", Vstream, Vstream, charge, temp])
+
+            elif get_type(charge)[0] == "cpr":
+                sortie.append(["B", Vstream, Vstream, charge, temp])
+            
             charge = 0
 
         elif etype in ["int", "str"]:
@@ -53,7 +62,7 @@ def parse(e, i, length):
             # soit [VAR > STREAM] (length == 0) soit [STREAM > VAR]
             sortie.append(["H", Vstream, econt] if length == 0 else ["H", econt, Vstream])
 
-        elif etype == "op":
+        elif etype in ["op", "cpr"]:
             charge = econt
 
         else:
