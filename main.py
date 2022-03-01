@@ -85,11 +85,5 @@ class Decoupeur:
 
 
 Decoupeur("""
-42 > $coucou
-""")
-
-print("\n--------------------\n")
-
-Decoupeur("""
-$coucou > print
+1, 0 >> or > $coucou > print
 """)
