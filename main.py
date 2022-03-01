@@ -70,5 +70,5 @@ class Decoupeur:
 
 
 Decoupeur("""
-0, 1 >> or + 41 > print
+$coucou - $test > $coucou
 """)
