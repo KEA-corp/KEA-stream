@@ -96,19 +96,20 @@ class Decoupeur:
 
 Decoupeur("""
 1 > $i
-30000 > LOOP
+15000 > LOOP
     $i ** 0.5 + 1 > $max
     0 > $j
+    1 > $good
     $max - 2 > LOOP
         $j + 2 > $j2
         $i % $j2 == 0 > IF
-            2 > BREAK
-            END
-        $max - 1 =- $j2 > IF
-            $i > print
+            0 > $good
             2 > BREAK
             END
         $j + 1 > $j
+        END
+    $good > IF
+        $i > print
         END
     $i + 2 > $i
     END
