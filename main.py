@@ -54,8 +54,8 @@ class Decoupeur:
             if len(e[2]) != e[1] and self.decouped.index(e) != len(self.decouped) - 1:
                 raise Exception("le nombre de chevron ne correspond pas au nombre de parametres")
             for i in range(len(e[2])):
-                for e in parse(e, i, len(analysed)):
-                    analysed.append(e)
+                for elm in parse(e, i, len(analysed)):
+                    analysed.append(elm)
                 
         if DEBUG_PRINT:
             print("\nAnalyse :")
@@ -70,5 +70,5 @@ class Decoupeur:
 
 
 Decoupeur("""
-1 > print
+0, 1 >> or + 41 > print
 """)
