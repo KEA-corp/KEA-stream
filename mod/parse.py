@@ -62,7 +62,6 @@ def parse(e, i, length, ACTIVE_MCN): # sourcery no-metrics
             if e[0] > 1:
                 raise Exception("une variable ne peut pas prendre plusieurs entrées")
             # soit [VAR > STREAM] (length == 0) soit [STREAM > VAR]
-            print(length)
             sortie.append(["H", Vstream, econt] if length == 0 else ["H", econt, Vstream])
 
         elif etype == "mc":

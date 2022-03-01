@@ -89,9 +89,9 @@ class Decoupeur:
         return analysed
 
     def generer(self) -> str:
-        print("\nGeneration :")
+        print("\n")
         for e in self.analysed:
-            print("| " + " ".join([f.replace("=+", ">").replace("=-", "<") for f in e]))
+            print(" ".join([f.replace("=+", ">").replace("=-", "<") for f in e]))
 
 
 Decoupeur("""
