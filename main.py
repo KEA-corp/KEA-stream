@@ -16,7 +16,7 @@ class Decoupeur:
         return code
 
     def decoupe(self) -> list:
-        analiser_codetemp = lambda code: [c.strip() for c in code.split("|")]
+        analiser_codetemp = lambda code: [c.strip() for c in code.split(",")]
         code = self.brut
         exit_list = []
         in_str = False
@@ -50,13 +50,24 @@ class Decoupeur:
         analysed = []
         for e in self.decouped:
             if len(e[2]) != e[1] and self.decouped.index(e) != len(self.decouped) - 1:
-                raise Exception("Erreur de syntaxe")
+                raise Exception("le nombre de chevron ne correspond pas au nombre de parametres")
             for i in range(len(e[2])):
-                c = e[2][i]
-                if c.startswith("."):
-                    analysed.append(["V", f"stream{i}" ,c[1:].strip()])
-                elif c in ["loop", "LOOP"]:
-                    analysed.append(["L", f"loop{i}" ,f"stream{i}"])
+                c = str(e[2][i])
+                if c.isdigit():
+                    # si c'est un nombre
+                    analysed.append(["V", f"stream{i}" ,c.strip()])
+                elif c[0] == c[-1] and c[0] in ["'", '"']:
+                    # si c'est une chaine
+                    analysed.append(["V", f"stream{i}" ,c[1:-1]])
+                elif c[0] == "$":
+                    if e[0] > 1:
+                        raise Exception("une variable ne peut pas prendre plusieurs entrées")
+                    if len(analysed) == 0:
+                        analysed.append(["H", f"stream{i}", c[1:]])
+                    else:
+                        analysed.append(["H", c[1:], f"stream{i}"])
+
+
                 else:
                     analysed.append(["T", c ,"&".join([f"stream{j+i}" for j in range(e[0] // (e[1] if e[1] != 0 else 1))])])
                     if e[1] > 0:
@@ -74,5 +85,5 @@ class Decoupeur:
 
 
 Decoupeur("""
-42 > LOOP
+42 > $coucou
 """)
