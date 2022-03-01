@@ -11,6 +11,8 @@ def get_type(elmt: str):
         return "str", elmt[1:-1]
     elif elmt[0] == "$":
         return "var", elmt[1:]
+    elif elmt in ["LOOP", "IF", "END"]:
+        return "mc", elmt
     elif elmt in ["+", "-", "*", "/", "%", "^", "**"]:
         return "op", elmt
     elif elmt in ["==", "!=", "=", "=+", "=-", "==+", "==-"]:
