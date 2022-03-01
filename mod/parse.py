@@ -5,7 +5,7 @@ def remove_strvide(liste):
 
 
 def get_type(elmt: str):
-    if elmt.isdigit():
+    if elmt.replace(".", "").isdigit():
         return "int", elmt
     elif elmt[0] == elmt[-1] and elmt[0] in ["'", '"']:
         return "str", elmt[1:-1]
@@ -45,7 +45,7 @@ def parse(e, i, length, ACTIVE_MCN): # sourcery no-metrics
                 temp = econt
 
             else:
-                raise Exception(f"{etype} ne peut pas etre utilise apres un operateur")
+                raise Exception(f"{etype} ne peut pas etre utilise apres un operateur ({econt})")
 
             if get_type(charge)[0] == "op":
                 sortie.append(["C", Vstream, Vstream, charge, temp])

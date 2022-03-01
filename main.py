@@ -96,11 +96,21 @@ class Decoupeur:
 
 Decoupeur("""
 1 > $i
-10 > LOOP
-    $i % 3 == 0 > IF
-        $i > print
-        2 > BREAK
+30000 > LOOP
+    $i ** 0.5 + 1 > $max
+    0 > $j
+    $max - 2 > LOOP
+        $j + 2 > $j2
+        $i % $j2 == 0 > IF
+            2 > BREAK
+            END
+        $max - 1 =- $j2 > IF
+            $i > print
+            2 > BREAK
+            END
+        $j + 1 > $j
         END
-    $i + 1 > $i
+    $i + 2 > $i
     END
+
 """)
