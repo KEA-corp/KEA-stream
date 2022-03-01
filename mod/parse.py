@@ -76,7 +76,7 @@ def parse(e, i, length, ACTIVE_MCN): # sourcery no-metrics
                 ACTIVE_MCN[1] += 1
 
             elif econt == "END":
-                sortie.append(["Z", ACTIVE_MCN[0][-1]])
+                sortie.append(["E", ACTIVE_MCN[0][-1]])
                 ACTIVE_MCN[0].pop()
 
         elif etype in ["op", "cpr"]:
