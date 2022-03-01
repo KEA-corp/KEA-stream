@@ -60,15 +60,15 @@ class Decoupeur:
                     # si c'est une chaine
                     analysed.append(["V", f"stream{i}" ,c[1:-1]])
                 elif c[0] == "$":
+                    # si c'est une variable
                     if e[0] > 1:
                         raise Exception("une variable ne peut pas prendre plusieurs entrées")
                     if len(analysed) == 0:
                         analysed.append(["H", f"stream{i}", c[1:]])
                     else:
                         analysed.append(["H", c[1:], f"stream{i}"])
-
-
                 else:
+                    # si c'est une fonction
                     analysed.append(["T", c ,"&".join([f"stream{j+i}" for j in range(e[0] // (e[1] if e[1] != 0 else 1))])])
                     if e[1] > 0:
                         analysed[-1].append(f"stream{i}")
@@ -86,4 +86,10 @@ class Decoupeur:
 
 Decoupeur("""
 42 > $coucou
+""")
+
+print("\n--------------------\n")
+
+Decoupeur("""
+$coucou > print
 """)
