@@ -7,13 +7,11 @@ class Decoupeur:
         self.analysed = self.analyse()
         self.generer()
 
-
     def polissage(self, code) -> str:
         code = code.replace("\n", " ").replace("\t", " ").strip()
         if DEBUG_PRINT:
             print(f"Polissage :\n| {code}")
         return code
-
 
     def decoupe(self) -> list:
         analiser_codetemp = lambda code: [c.strip() for c in code.split(",")]
@@ -46,7 +44,6 @@ class Decoupeur:
                 print(f"| {e}")
         return exit_list
 
-
     def analyse(self) -> list:
         analysed = []
         for e in self.decouped:
@@ -60,6 +57,11 @@ class Decoupeur:
             for a in analysed:
                 print(f"| {a}")
         return analysed
+
+    def generer(self) -> str:
+        print("\nGeneration :")
+        for e in self.analysed:
+            print("| " + " ".join(e))
 
 
     def parse(self, e, i, length):
@@ -90,14 +92,11 @@ class Decoupeur:
             while "" in sortie:
                 sortie.remove("")
             return sortie
-        
 
-    def generer(self) -> str:
-        print("\nGeneration :")
-        for e in self.analysed:
-            print("| " + " ".join(e))
+
+
 
 
 Decoupeur("""
-coucou > print
+1, 0 >> or > $coucou > print
 """)
