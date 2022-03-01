@@ -70,7 +70,7 @@ class Decoupeur:
         i =>        index de la partie a analyser
         length =>   longeur de la liste de code deja analyser
         """
-        
+
         c = str(e[2][i])
         Vstream = f"stream{i}"
         
