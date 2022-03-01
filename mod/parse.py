@@ -11,7 +11,7 @@ def get_type(elmt: str):
         return "str", elmt[1:-1]
     elif elmt[0] == "$":
         return "var", elmt[1:]
-    elif elmt in ["LOOP", "IF", "END"]:
+    elif elmt in ["LOOP", "IF", "END", "BREAK"]:
         return "mc", elmt
     elif elmt in ["+", "-", "*", "/", "%", "^", "**"]:
         return "op", elmt
@@ -78,6 +78,9 @@ def parse(e, i, length, ACTIVE_MCN): # sourcery no-metrics
             elif econt == "END":
                 sortie.append(["E", ACTIVE_MCN[0][-1]])
                 ACTIVE_MCN[0].pop()
+
+            elif econt == "BREAK":
+                sortie.append(["Z", Vstream])
 
         elif etype in ["op", "cpr"]:
             charge = econt

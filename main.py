@@ -95,8 +95,12 @@ class Decoupeur:
 
 
 Decoupeur("""
-0 > $i
+1 > $i
 10 > LOOP
-    $i + 1 > $i > print
+    $i % 3 == 0 > IF
+        $i > print
+        2 > BREAK
+        END
+    $i + 1 > $i
     END
 """)
