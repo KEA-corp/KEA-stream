@@ -66,29 +66,30 @@ class Decoupeur:
 
     def parse(self, e, i, length):
         c = str(e[2][i])
+        Vstream = f"stream{i}"
         
         # si c'est un nombre
         if c.isdigit():
-            return ["V", f"stream{i}" ,c.strip()]
+            return ["V", Vstream, c.strip()]
         
         # si c'est une chaine
         elif c[0] == c[-1] and c[0] in ["'", '"']:
-            return ["V", f"stream{i}" ,c[1:-1]]
+            return ["V", Vstream, c[1:-1]]
         
         # si c'est une variable
         elif c[0] == "$":
             if e[0] > 1:
                 raise Exception("une variable ne peut pas prendre plusieurs entrées")
             if length == 0:
-                return ["H", f"stream{i}", c[1:]]
+                return ["H", Vstream, c[1:]]
             else:
-                return ["H", c[1:], f"stream{i}"]
+                return ["H", c[1:], Vstream]
         
         # si c'est une fonction
         else:
             sortie = ["T", c ,"&".join([f"stream{j+i}" for j in range(e[0] // (e[1] if e[1] != 0 else 1))])]
             if e[1] > 0:
-                sortie.append(f"stream{i}")
+                sortie.append(Vstream)
             while "" in sortie:
                 sortie.remove("")
             return sortie
