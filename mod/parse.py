@@ -1,3 +1,9 @@
+def remove_strvide(liste):
+    while "" in liste:
+        liste.remove("")
+    return liste
+
+
 def get_type(elmt: str):
     if elmt.isdigit():
         return "int", elmt
@@ -19,26 +25,28 @@ def parse(e, i, length):
     """
 
 
-    c = str(e[2][i])
     Vstream = f"stream{i}"
     sortie = []
 
-    etype, econt = get_type(c)
+    for c in str(e[2][i]).split(" "):
 
-    if etype in ["int", "str"]:
-        sortie.append(f"V {Vstream} {econt}")
+        etype, econt = get_type(c)
+
+        if etype in ["int", "str"]:
+            sortie.append(["V", Vstream, econt])
+        
+        elif etype == "var":
+            if e[0] > 1:
+                raise Exception("une variable ne peut pas prendre plusieurs entrées")
+            # soit [VAR > STREAM] (length == 0) soit [STREAM > VAR]
+            sortie.append(["H", Vstream, econt] if length == 0 else ["H", econt, Vstream])
+
+        # si c'est une fonction
+        else:
+            temp = ["T", c ,"&".join([f"stream{j+i}" for j in range(e[0] // (e[1] if e[1] != 0 else 1))])]
+            # si la fonction retourne une valeur
+            if e[1] > 0:
+                temp.append(Vstream)
+            sortie.append(remove_strvide(temp))
     
-    elif c[0] == "$":
-        if e[0] > 1:
-            raise Exception("une variable ne peut pas prendre plusieurs entrées")
-        # soit [VAR > STREAM] (length == 0) soit [STREAM > VAR]
-        return ["H", Vstream, c[1:]] if length == 0 else ["H", c[1:], Vstream]
-
-    # si c'est une fonction
-    else:
-        sortie = ["T", c ,"&".join([f"stream{j+i}" for j in range(e[0] // (e[1] if e[1] != 0 else 1))])]
-        if e[1] > 0:
-            sortie.append(Vstream)
-        while "" in sortie:
-            sortie.remove("")
-        return sortie
+    return sortie
