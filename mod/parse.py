@@ -13,13 +13,13 @@ def get_type(elmt: str):
         return "var", elmt[1:]
     elif elmt in ["+", "-", "*", "/", "%", "^", "**"]:
         return "op", elmt
-    elif elmt in ["==", "!=", "="]:
+    elif elmt in ["==", "!=", "=", "=+", "=-", "==+", "==-"]:
         return "cpr", elmt
     else:
         return "func", elmt
 
 
-def parse(e, i, length):
+def parse(e, i, length): # sourcery no-metrics
     """
     e =>        [nb in args, nb out args, [code]]
     i =>        index de la partie a analyser

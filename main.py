@@ -66,9 +66,9 @@ class Decoupeur:
     def generer(self) -> str:
         print("\nGeneration :")
         for e in self.analysed:
-            print("| " + " ".join(e))
+            print("| " + " ".join([f.replace("=+", ">").replace("=-", "<") for f in e]))
 
 
 Decoupeur("""
-$coucou = $test > $coucou
+$coucou =+ $test > $coucou
 """)
