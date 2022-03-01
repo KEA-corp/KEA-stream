@@ -1,7 +1,8 @@
+from threading import local
 from mod.parse import parse
 
 DEBUG_PRINT = True
-ACTIVE_MCN = [] # nom des boucle / condition active
+ACTIVE_MCN = [[],0] # nom des boucle / condition active
 
 class Decoupeur:
     def __init__(self, code: str):
@@ -71,11 +72,15 @@ class Decoupeur:
         return decouped
 
     def analyse(self) -> list:
+        global ACTIVE_MCN
         analysed = []
         for d in self.decouped:
+            local_analyse = []
             for e in d:
                 for i in range(len(e[2])):
-                    analysed.extend(iter(parse(e, i, len(analysed))))
+                    sortie, ACTIVE_MCN = parse(e, i, len(local_analyse), ACTIVE_MCN)
+                    local_analyse.extend(iter(sortie))
+            analysed.extend(local_analyse)
 
         if DEBUG_PRINT:
             print("\nAnalyse :")
@@ -90,6 +95,8 @@ class Decoupeur:
 
 
 Decoupeur("""
-1 > print
-2 > print
+0 > $i
+10 > LOOP
+    $i + 1 > $i > print
+    END
 """)

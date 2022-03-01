@@ -21,7 +21,7 @@ def get_type(elmt: str):
         return "func", elmt
 
 
-def parse(e, i, length): # sourcery no-metrics
+def parse(e, i, length, ACTIVE_MCN): # sourcery no-metrics
     """
     e =>        [nb in args, nb out args, [code]]
     i =>        index de la partie a analyser
@@ -43,7 +43,7 @@ def parse(e, i, length): # sourcery no-metrics
 
             elif etype == "var":
                 temp = econt
-            
+
             else:
                 raise Exception(f"{etype} ne peut pas etre utilise apres un operateur")
 
@@ -62,7 +62,23 @@ def parse(e, i, length): # sourcery no-metrics
             if e[0] > 1:
                 raise Exception("une variable ne peut pas prendre plusieurs entrées")
             # soit [VAR > STREAM] (length == 0) soit [STREAM > VAR]
+            print(length)
             sortie.append(["H", Vstream, econt] if length == 0 else ["H", econt, Vstream])
+
+        elif etype == "mc":
+            if econt == "LOOP":
+                sortie.append(["L", f"loop{ACTIVE_MCN[1]}", Vstream])
+                ACTIVE_MCN[0].append(f"loop{ACTIVE_MCN[1]}")
+                ACTIVE_MCN[1] += 1
+
+            elif econt == "IF":
+                sortie.append(["X", f"if{ACTIVE_MCN[1]}", Vstream])
+                ACTIVE_MCN[0].append(f"if{ACTIVE_MCN[1]}")
+                ACTIVE_MCN[1] += 1
+
+            elif econt == "END":
+                sortie.append(["Z", ACTIVE_MCN[0][-1]])
+                ACTIVE_MCN[0].pop()
 
         elif etype in ["op", "cpr"]:
             charge = econt
@@ -74,4 +90,4 @@ def parse(e, i, length): # sourcery no-metrics
                 temp.append(Vstream)
             sortie.append(remove_strvide(temp))
 
-    return sortie
+    return sortie, ACTIVE_MCN
