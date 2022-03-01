@@ -9,6 +9,8 @@ class Decoupeur:
 
     def polissage(self, code) -> str:
         code = code.replace("\n", " ").replace("\t", " ").strip()
+        while "  " in code:
+            code = code.replace("  ", " ")
         if DEBUG_PRINT:
             print(f"Polissage :\n| {code}")
         return code
@@ -105,5 +107,5 @@ class Decoupeur:
 
 
 Decoupeur("""
-1, 0 >> or > $coucou > print
+1 + 6 > print
 """)
