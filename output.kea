@@ -1,3 +1,11 @@
 # add kea_dep/Uf.kea
-V stream0 coucou_toto
+// start
+F pow arg0&arg1
+H stream0 arg0
+C stream0 stream0 ** arg1
+E pow stream0
+// end
+V stream0 2
+V stream1 8
+T pow stream0&stream1 stream0
 T print stream0

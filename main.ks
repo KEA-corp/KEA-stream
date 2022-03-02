@@ -1,3 +1,9 @@
 # add kea_dep/Uf.kea
 
-"coucou toto" > print
+
+
+FUNC pow $arg0$arg1
+    $arg0 ** $arg1 > RETURN
+
+
+2, 8 >> pow > print 

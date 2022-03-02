@@ -24,7 +24,7 @@ def get_type(elmt: str):
         return "str", elmt[1:-1].replace(" ", "_")
     elif elmt[0] == "$":
         return "var", elmt[1:]
-    elif elmt in ["LOOP", "IF", "END", "BREAK"]:
+    elif elmt in ["LOOP", "IF", "END", "BREAK", "FUNC", "RETURN"]:
         return "mc", elmt
     elif elmt in ["+", "-", "*", "/", "%", "^", "**"]:
         return "op", elmt
@@ -45,11 +45,23 @@ def parse(e, i, length, ACTIVE_MCN): # sourcery no-metrics
     Vstream = f"stream{i}"
     sortie = []
 
+    generate_func_args = lambda e, i :"&".join([f"stream{j+i}" for j in range(e[0] // (e[1] if e[1] != 0 else 1))])
+
     for c in split_string(str(e[2][i])):
 
         etype, econt = get_type(c)
 
         if charge:
+            if charge == "func_args":
+                sortie.append(["F", ACTIVE_MCN[0][-1], econt.replace("$", "&")])
+                charge = 0
+                continue
+
+            elif charge == "func_name":
+                ACTIVE_MCN[0].append(econt)
+                charge = "func_args"
+                continue
+
             if etype in ["int", "str"]:
                 sortie.append(["V", "temp", econt])
                 temp = "temp"  
@@ -95,11 +107,18 @@ def parse(e, i, length, ACTIVE_MCN): # sourcery no-metrics
             elif econt == "BREAK":
                 sortie.append(["Z", Vstream])
 
+            elif econt == "FUNC":
+                charge = "func_name"
+
+            elif econt == "RETURN":
+                sortie.append(["E", ACTIVE_MCN[0][-1], Vstream])
+                ACTIVE_MCN[0].pop()
+
         elif etype in ["op", "cpr"]:
             charge = econt
 
         else:
-            temp = ["T", c ,"&".join([f"stream{j+i}" for j in range(e[0] // (e[1] if e[1] != 0 else 1))])]
+            temp = ["T", c ,generate_func_args(e, i)]
             # si la fonction retourne une valeur
             if e[1] > 0:
                 temp.append(Vstream)
