@@ -1,9 +1,20 @@
 # add kea_dep/Uf.kea
 
+100 > random > $tofind
 
+10 > LOOP
 
-FUNC pow $arg0$arg1
-    $arg0 ** $arg1 > RETURN
+	"proposition: " > input > $user
 
+	$tofind =- $user > IF
+		"c est plus petit" > print
+		END
 
-2, 8 >> pow > print
+	$tofind =+ $user > IF
+		"c est plus grand" > print
+		END
+	
+	$tofind =  $user > IF
+		"bravo!" > print
+		2 > BREAK
+	END

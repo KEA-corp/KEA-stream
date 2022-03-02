@@ -1,11 +1,29 @@
 # add kea_dep/Uf.kea
-// start
-F pow arg0&arg1
-H stream0 arg0
-C stream0 stream0 ** arg1
-E pow stream0
-// end
-V stream0 2
-V stream1 8
-T pow stream0&stream1 stream0
+V stream0 100
+T random stream0 stream0
+H tofind stream0
+V stream0 10
+L loop0 stream0
+V stream0 proposition:_
+T input stream0 stream0
+H user stream0
+H stream0 tofind
+B stream0 stream0 < user
+X if1 stream0
+V stream0 c_est_plus_petit
 T print stream0
+E if1
+H stream0 tofind
+B stream0 stream0 > user
+X if2 stream0
+V stream0 c_est_plus_grand
+T print stream0
+E if2
+H stream0 tofind
+B stream0 stream0 = user
+X if3 stream0
+V stream0 bravo!
+T print stream0
+V stream0 2
+Z stream0
+E if3
