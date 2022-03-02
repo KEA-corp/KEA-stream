@@ -1,3 +1,21 @@
+'''
+--|~|--|~|--|~|--|~|--|~|--|~|--
+
+██  ████        ██████        ██
+████    ██     ██           ████
+██      ██   ████████     ██  ██
+████████       ██       ██    ██
+██             ██       █████████
+██             ██             ██
+██
+ - codé en : UTF-8
+ - langage : python 3
+ - GitHub  : github.com/pf4-DEV
+             github.com/KEA-corp
+ - Licence : mit
+--|~|--|~|--|~|--|~|--|~|--|~|--
+'''
+
 from mod.parse import parse
 
 
