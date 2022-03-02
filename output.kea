@@ -1,0 +1,4 @@
+// affichage 1 > coucou
+T i stream0
+H coucou stream0
+T print stream0

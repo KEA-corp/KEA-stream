@@ -4,12 +4,12 @@ from mod.parse import parse
 class Decoupeur:
     
     def __init__(self, code, debug=False):
-        self.DEBUG_PRINT = debug
+        self.DEBUG_PRINT = bool(debug)
         self.active_mcn = [[],0] # nom des boucle / condition active
         self.brut = code
     
     def start(self):
-        self.polissage(self.brut)
+        self.brut = self.polissage(self.brut)
         self.decouped = self.decoupe()
         self.analysed = self.analyse()
         return self.generer()
@@ -78,10 +78,16 @@ class Decoupeur:
         analysed = []
         for d in self.decouped:
             local_analyse = []
+
+            if d[0][2][0].startswith("#") or d[0][2][0].startswith("//"):
+                analysed.append([" =+ ".join([e[2][0] for e in d])])
+                continue
+
             for e in d:
                 for i in range(len(e[2])):
                     sortie, self.active_mcn = parse(e, i, len(local_analyse), self.active_mcn)
                     local_analyse.extend(iter(sortie))
+
             analysed.extend(local_analyse)
 
         if self.DEBUG_PRINT:
