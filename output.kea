@@ -1,4 +1,16 @@
-// affichage 1 > coucou
-T i stream0
-H coucou stream0
+# add mod/Uf.kea
+V stream0 0
+H i stream0
+V stream0 10
+L loop0 stream0
+H stream0 i
+V temp _+_
+C stream0 stream0 + temp
+V temp 10
+C stream0 stream0 + temp
 T print stream0
+H stream0 i
+V temp 1
+C stream0 stream0 + temp
+H i stream0
+E loop0
