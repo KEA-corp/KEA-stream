@@ -3,12 +3,25 @@ def remove_strvide(liste):
         liste.remove("")
     return liste
 
+def split_string(text):
+    # decouper la chaine de caractere en liste au espaces mais pas dans les quotes
+    in_quote = False
+    sortie = [""]
+    for c in text:
+        if c == '"':
+            in_quote = not in_quote
+            sortie[-1] += c
+        elif c == " " and not in_quote:
+            sortie.append("")
+        else:
+            sortie[-1] += c
+    return sortie
 
 def get_type(elmt: str):
     if elmt.replace(".", "").isdigit():
         return "int", elmt
     elif elmt[0] == elmt[-1] and elmt[0] in ["'", '"']:
-        return "str", elmt[1:-1]
+        return "str", elmt[1:-1].replace(" ", "_")
     elif elmt[0] == "$":
         return "var", elmt[1:]
     elif elmt in ["LOOP", "IF", "END", "BREAK"]:
@@ -32,7 +45,7 @@ def parse(e, i, length, ACTIVE_MCN): # sourcery no-metrics
     Vstream = f"stream{i}"
     sortie = []
 
-    for c in str(e[2][i]).split(" "):
+    for c in split_string(str(e[2][i])):
 
         etype, econt = get_type(c)
 
