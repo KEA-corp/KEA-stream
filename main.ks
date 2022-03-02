@@ -1,4 +1,4 @@
-# add mod/Uf.kea
+# add kea_dep/Uf.kea
 
 0 > $i
 
