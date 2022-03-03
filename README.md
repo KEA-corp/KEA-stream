@@ -1,1 +1,1 @@
-Documentation sur le KEA et KEA-stream sur [kea-corp.github.io](https://kea-corp.github.io/doc/)
+Documentation sur le KEA et KEA-stream sur [kea-corp.github.io](https://kea-corp.github.io)
