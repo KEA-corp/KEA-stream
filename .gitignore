@@ -1,5 +1,4 @@
 *.pyc
 inter.php
 kea_dep/
-*.ks
-*.kea
+KS/
