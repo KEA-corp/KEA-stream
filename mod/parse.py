@@ -34,18 +34,19 @@ def get_type(elmt: str):
         return "func", elmt
 
 
-def parse(e, i, length, ACTIVE_MCN): # sourcery no-metrics
+def parse(e, i, is_pushed, ACTIVE_MCN): # sourcery no-metrics
     """
-    e =>        [nb in args, nb out args, [code]]
-    i =>        index de la partie a analyser
-    length =>   longeur de la liste de code deja analyser
+    e  =>        [nb in args, nb out args, [code]]
+    i  =>        index de la partie a analyser
+    is_pushed => longeur de la liste de code deja analyser
     """
 
     charge = 0
     Vstream = f"stream{i}"
     sortie = []
 
-    generate_func_args = lambda e, i :"&".join([f"stream{j+i}" for j in range(e[0] // (e[1] if e[1] != 0 else 1))])
+    def generate_func_args(e, i):
+        return "&".join([f"stream{j+i+(i if e[0] - e[1] > 1 else 0)}" for j in range(e[0] // (e[1] if e[1] != 0 else 1))])
 
     for c in split_string(str(e[2][i])):
 
@@ -84,10 +85,8 @@ def parse(e, i, length, ACTIVE_MCN): # sourcery no-metrics
             sortie.append(["V", Vstream, econt])
 
         elif etype == "var":
-            if e[0] > 1:
-                raise Exception("une variable ne peut pas prendre plusieurs entrées")
-            # soit [VAR > STREAM] (length == 0) soit [STREAM > VAR]
-            sortie.append(["H", Vstream, econt] if length == 0 else ["H", econt, Vstream])
+            # soit [VAR > STREAM] (is_pushed == 0) soit [STREAM > VAR]
+            sortie.append(["H", Vstream, econt] if is_pushed == 0 else ["H", econt, Vstream])
 
         elif etype == "mc":
             if econt == "LOOP":

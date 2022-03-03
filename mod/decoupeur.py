@@ -96,6 +96,7 @@ class Decoupeur:
         analysed = []
         for d in self.decouped:
             local_analyse = []
+            is_pushed = False
 
             if d[0][2][0].startswith("#") or d[0][2][0].startswith("//"):
                 analysed.append([" =+ ".join([e[2][0] for e in d])])
@@ -103,9 +104,10 @@ class Decoupeur:
 
             for e in d:
                 for i in range(len(e[2])):
-                    sortie, self.active_mcn = parse(e, i, len(local_analyse), self.active_mcn)
+                    sortie, self.active_mcn = parse(e, i, is_pushed, self.active_mcn)
                     local_analyse.extend(iter(sortie))
-
+                
+                is_pushed = True
             analysed.extend(local_analyse)
 
         if self.DEBUG_PRINT:
