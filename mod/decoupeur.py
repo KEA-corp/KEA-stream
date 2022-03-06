@@ -47,9 +47,7 @@ class Decoupeur:
         self.brut = self.polissage(self.brut)
         self.decouped = self.decoupe()
         self.analysed = self.analyse()
-        self.genered = self.generer()
-        if not isdown(self.genered): StatusDisplay.statuprint(1, "generate")
-        return self.genered
+        return self.generer()
 
     def polissage(self, code) -> str:
         def replace_while(old, new, text):
@@ -146,5 +144,6 @@ class Decoupeur:
 
     def generer(self) -> str:
         if isdown(self.analysed):
-            return StatusDisplay.statuprint(0, "generer")
+            return StatusDisplay.statuprint(0, "generation")
+        StatusDisplay.statuprint(1, "generation")
         return [[f.replace("=+", ">").replace("=-", "<") for f in e] for e in self.analysed]
