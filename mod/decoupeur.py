@@ -18,6 +18,23 @@
 
 from mod.parse import parse
 
+def isdown(var):
+    return var == 0
+
+class StatusDisplay:
+    def colorprint(text, color):
+        print(f"\033[{color}m{text}\033[0m")
+    
+    def error(text):
+        StatusDisplay.colorprint(text, "36")
+        return 0
+    
+    def statuprint(etat: bool, nom):
+        if etat:
+            StatusDisplay.colorprint(f"🟢 pass - {nom}", "32")
+        else:
+            StatusDisplay.colorprint(f"🔴 fail - {nom}", "31")
+        return etat
 
 class Decoupeur:
     
@@ -30,7 +47,9 @@ class Decoupeur:
         self.brut = self.polissage(self.brut)
         self.decouped = self.decoupe()
         self.analysed = self.analyse()
-        return self.generer()
+        self.genered = self.generer()
+        if not isdown(self.genered): StatusDisplay.statuprint(1, "generate")
+        return self.genered
 
     def polissage(self, code) -> str:
         def replace_while(old, new, text):
@@ -44,6 +63,8 @@ class Decoupeur:
 
         if self.DEBUG_PRINT:
             print(f"Polissage :\n| {code}")
+        
+        StatusDisplay.statuprint(1, "polissage")
         return code
 
     def decoupe(self) -> list:
@@ -79,7 +100,7 @@ class Decoupeur:
         for d in decouped:
             for e in d:
                 if len(e[2]) != e[1] and len(d) - 1 != d.index(e):
-                    raise Exception("le nombre de chevron ne correspond pas au nombre de parametres")
+                    return StatusDisplay.statuprint(StatusDisplay.error(f"le nombre de chevron ne correspond pas au nombre de parametres\n-> {e[2]}"), "decoupe")
                 if e[2] == [""]:
                     decouped.remove(d)
 
@@ -90,9 +111,12 @@ class Decoupeur:
                 for e in d:
                     print(f"| | {e}")
 
+        StatusDisplay.statuprint(1, "decoupe")
         return decouped
 
     def analyse(self) -> list:
+        if isdown(self.decouped):
+            return StatusDisplay.statuprint(0, "analyse")
         analysed = []
         for d in self.decouped:
             local_analyse = []
@@ -105,6 +129,8 @@ class Decoupeur:
             for e in d:
                 for i in range(len(e[2])):
                     sortie, self.active_mcn = parse(e, i, is_pushed, self.active_mcn)
+                    if isdown(sortie):
+                        return StatusDisplay.statuprint(StatusDisplay.error(self.active_mcn), "analyse")
                     local_analyse.extend(iter(sortie))
                 
                 is_pushed = True
@@ -114,7 +140,11 @@ class Decoupeur:
             print("\nAnalyse :")
             for a in analysed:
                 print(f"| {a}")
+
+        StatusDisplay.statuprint(1, "analyse")
         return analysed
 
-    def generer(self) -> str:                
+    def generer(self) -> str:
+        if isdown(self.analysed):
+            return StatusDisplay.statuprint(0, "generer")
         return [[f.replace("=+", ">").replace("=-", "<") for f in e] for e in self.analysed]

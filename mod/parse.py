@@ -71,7 +71,7 @@ def parse(e, i, is_pushed, ACTIVE_MCN): # sourcery no-metrics
                 temp = econt
 
             else:
-                raise Exception(f"{etype} ne peut pas etre utilise apres un operateur ({econt})")
+                return 0, f"{etype} ne peut pas etre utilise apres un operateur\n-> {econt}"
 
             if get_type(charge)[0] == "op":
                 sortie.append(["C", Vstream, Vstream, charge, temp])

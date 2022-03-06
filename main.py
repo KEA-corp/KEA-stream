@@ -12,9 +12,11 @@ options = parser.parse_args()[0]
 
 code = open(options.file, "r").read()
 
-kea = Decoupeur(code, options.debug)
+kea = Decoupeur(code, options.debug).start()
 
-parsed = "\n".join([" ".join(k) for k in kea.start()])
+if kea != 0:
 
-with open(options.output, "w") as f:
-    f.write(parsed)
+    parsed = "\n".join([" ".join(k) for k in kea])
+
+    with open(options.output, "w") as f:
+        f.write(parsed)
