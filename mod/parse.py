@@ -24,11 +24,11 @@ def get_type(elmt: str):
         return "str", elmt[1:-1].replace(" ", "_")
     elif elmt[0] == "$":
         return "var", elmt[1:]
-    elif elmt in ["LOOP", "IF", "END", "BREAK", "FUNC", "RETURN"]:
+    elif elmt in {"LOOP", "IF", "END", "BREAK", "FUNC", "RETURN"}:
         return "mc", elmt
-    elif elmt in ["+", "-", "*", "/", "%", "^", "**"]:
+    elif elmt in {"+", "-", "*", "/", "%", "^", "**"}:
         return "op", elmt
-    elif elmt in ["==", "!=", "=", "=+", "=-", "==+", "==-"]:
+    elif elmt in {"==", "!=", "=", "=+", "=-", "==+", "==-"}:
         return "cpr", elmt
     else:
         return "func", elmt
