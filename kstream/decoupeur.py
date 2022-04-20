@@ -16,7 +16,7 @@
 --|~|--|~|--|~|--|~|--|~|--|~|--
 '''
 
-from mod.parse import parse
+from kstream.parse import parse
 
 def isdown(var):
     return var == 0
