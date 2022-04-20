@@ -1,0 +1,7 @@
+V stream0 0
+V stream1 1
+T and stream0&stream1 stream0
+H res stream0
+
+H stream0 res
+T print stream0

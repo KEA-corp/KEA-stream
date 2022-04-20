@@ -22,26 +22,26 @@ def isdown(var):
     return var == 0
 
 class StatusDisplay:
-    def colorprint(text, color):
+    def __init__(self): ...
+
+    def colorprint(self, text, color):
         print(f"\033[{color}m{text}\033[0m")
     
-    def error(text):
-        StatusDisplay.colorprint(text, "36")
+    def error(self, text):
+        self.colorprint(text, "36")
         return 0
     
-    def statuprint(etat: bool, nom):
-        if etat:
-            StatusDisplay.colorprint(f"🟢 pass - {nom}", "32")
-        else:
-            StatusDisplay.colorprint(f"🔴 fail - {nom}", "31")
+    def statuprint(self, etat: bool, nom):
+        if etat: self.colorprint(f"🟢 pass - {nom}", "32")
+        else: self.colorprint(f"🔴 fail - {nom}", "31")
         return etat
 
 class Decoupeur:
-    
     def __init__(self, code, debug=False):
         self.DEBUG_PRINT = bool(debug)
         self.active_mcn = [[],0] # nom des boucle / condition active
         self.brut = code
+        self.sd = StatusDisplay()
     
     def start(self):
         self.brut = self.polissage(self.brut)
@@ -62,7 +62,7 @@ class Decoupeur:
         if self.DEBUG_PRINT:
             print(f"Polissage :\n| {code}")
         
-        StatusDisplay.statuprint(1, "polissage")
+        self.sd.statuprint(1, "polissage")
         return code
 
     def decoupe(self) -> list:
@@ -98,7 +98,7 @@ class Decoupeur:
         for d in decouped:
             for e in d:
                 if len(e[2]) != e[1] and len(d) - 1 != d.index(e):
-                    return StatusDisplay.statuprint(StatusDisplay.error(f"le nombre de chevron ne correspond pas au nombre de parametres\n-> {e[2]}"), "decoupe")
+                    return self.sd.statuprint(self.sd.error(f"le nombre de chevron ne correspond pas au nombre de parametres\n-> {e[2]}"), "decoupe")
                 if e[2] == [""]:
                     decouped.remove(d)
 
@@ -109,12 +109,12 @@ class Decoupeur:
                 for e in d:
                     print(f"| | {e}")
 
-        StatusDisplay.statuprint(1, "decoupe")
+        self.sd.statuprint(1, "decoupe")
         return decouped
 
     def analyse(self) -> list:
         if isdown(self.decouped):
-            return StatusDisplay.statuprint(0, "analyse")
+            return self.sd.statuprint(0, "analyse")
         analysed = []
         for d in self.decouped:
             local_analyse = []
@@ -127,23 +127,24 @@ class Decoupeur:
             for e in d:
                 for i in range(len(e[2])):
                     sortie, self.active_mcn = parse(e, i, is_pushed, self.active_mcn)
-                    if isdown(sortie):
-                        return StatusDisplay.statuprint(StatusDisplay.error(self.active_mcn), "analyse")
+                    if isdown(sortie): return self.sd.statuprint(self.sd.error(self.active_mcn), "analyse")
                     local_analyse.extend(iter(sortie))
                 
                 is_pushed = True
             analysed.extend(local_analyse)
+            analysed.append([])
+        analysed.pop()
 
         if self.DEBUG_PRINT:
             print("\nAnalyse :")
             for a in analysed:
                 print(f"| {a}")
 
-        StatusDisplay.statuprint(1, "analyse")
+        self.sd.statuprint(1, "analyse")
         return analysed
 
     def generer(self) -> str:
         if isdown(self.analysed):
-            return StatusDisplay.statuprint(0, "generation")
-        StatusDisplay.statuprint(1, "generation")
+            return self.sd.statuprint(0, "generation")
+        self.sd.statuprint(1, "generation")
         return [[f.replace("=+", ">").replace("=-", "<") for f in e] for e in self.analysed]
