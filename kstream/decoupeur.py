@@ -25,8 +25,8 @@ class StatusDisplay:
     def __init__(self, discret = False):
         self.discret = discret
 
-    def colorprint(self, text, color):
-        print(f"\033[{color}m{text}\033[0m")
+    def colorprint(self, text, color, end = "\n"):
+        print(f"\033[{color}m{text}\033[0m", end=end)
     
     def error(self, text):
         self.colorprint(text, "36")
