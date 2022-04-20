@@ -33,8 +33,8 @@ class StatusDisplay:
         return 0
     
     def statuprint(self, etat: bool, nom):
-        if etat and not self.discret: self.colorprint(f"🟢 pass - {nom}", "32")
-        elif not etat: self.colorprint(f"🔴 fail - {nom}", "31")
+        if etat and not self.discret: self.colorprint(f"🟢 pass - {nom}", 32)
+        elif not etat: self.colorprint(f"🔴 fail - {nom}", 31)
         return etat
 
 class Decoupeur:
